@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodGo | Admin Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --brand: #FF4B2B;
+      --brand-light: #FF6B47;
+      --brand-pale: rgba(255,75,43,0.12);
+      --brand-glow: rgba(255,75,43,0.25);
+      --accent: #1A1A2E;
+      --accent2: #16213E;
+      --success: #00C896;
+      --success-pale: rgba(0,200,150,0.12);
+      --warning: #FFB800;
+      --warning-pale: rgba(255,184,0,0.12);
+      --danger: #EF4444;
+      --danger-pale: rgba(239,68,68,0.12);
+      --info: #3B82F6;
+      --info-pale: rgba(59,130,246,0.12);
+      --bg: #0D0D1A;
+      --bg2: #12122A;
+      --surface: #1A1A2E;
+      --surface2: #222238;
+      --surface3: #2A2A42;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --text: #F0F0FF;
+      --text2: #C0C0D8;
+      --muted: #7070A0;
+      --sidebar-w: 260px;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { font-size:16px; }
+    body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; line-height:1.6; overflow:hidden; height:100vh; display:flex; }
+    a { text-decoration:none; color:inherit; }
+    button { cursor:pointer; border:none; outline:none; font-family:inherit; }
+    input,select,textarea { outline:none; font-family:inherit; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:var(--surface3); border-radius:6px; }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      position:fixed; inset:0;
+      background: radial-gradient(ellipse at 60% 30%, rgba(255,75,43,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(59,130,246,0.1) 0%, transparent 50%),
+      var(--bg);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999; transition:opacity 0.5s;
+    }
+    .login-wrap {
+      display:grid; grid-template-columns:1fr 1fr;
+      max-width:860px; width:90%;
+      background:var(--surface); border:1px solid var(--border2);
+      border-radius:28px; overflow:hidden;
+      box-shadow:0 40px 80px rgba(0,0,0,0.6);
+    }
+    .login-promo {
+      background: linear-gradient(145deg, var(--accent2) 0%, #0a0a1e 100%);
+      padding:52px 44px; position:relative; overflow:hidden;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .login-promo::before {
+      content:''; position:absolute;
+      width:400px; height:400px;
+      background:radial-gradient(circle, rgba(255,75,43,0.2) 0%, transparent 65%);
+      right:-80px; bottom:-80px; border-radius:50%;
+    }
+    .login-promo-logo {
+      font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800;
+      color:white; letter-spacing:-1px;
+    }
+    .login-promo-logo span { color:var(--brand); }
+    .admin-badge {
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--brand-pale); color:var(--brand);
+      border:1px solid rgba(255,75,43,0.3);
+      padding:4px 12px; border-radius:50px;
+      font-size:0.65rem; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      margin-bottom:24px; width:fit-content;
+    }
+    .login-promo h2 {
+      font-family:'Syne',sans-serif; font-size:2.4rem; font-weight:800;
+      color:white; line-height:1.1; letter-spacing:-1.5px; position:relative; z-index:1;
+    }
+    .login-promo h2 em { color:var(--brand); font-style:normal; }
+    .login-promo p { color:rgba(255,255,255,0.4); font-size:0.9rem; margin-top:14px; position:relative; z-index:1; }
+    .promo-stats { display:flex; gap:28px; position:relative; z-index:1; }
+    .ps-val { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:white; }
+    .ps-val.brand { color:var(--brand); }
+    .ps-lbl { font-size:0.68rem; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.5px; }
+    .login-form-wrap { padding:52px 44px; }
+    .login-form-wrap h3 {
+      font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:700;
+      margin-bottom:6px; letter-spacing:-0.5px;
+    }
+    .login-form-wrap .sub { font-size:0.85rem; color:var(--muted); margin-bottom:36px; }
+    .field { margin-bottom:20px; }
+    .field label { display:block; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:8px; }
+    .field input {
+      width:100%; padding:13px 16px;
+      background:var(--surface2); border:1.5px solid var(--border);
+      border-radius:12px; color:var(--text); font-size:0.9rem;
+      transition:all 0.2s;
+    }
+    .field input:focus { border-color:var(--brand); background:var(--surface3); box-shadow:0 0 0 4px var(--brand-pale); }
+    .hint { font-size:0.72rem; color:var(--muted); margin-top:5px; }
+    .btn-login-submit {
+      width:100%; padding:14px;
+      background:var(--brand); color:white;
+      border-radius:14px; font-family:'Syne',sans-serif;
+      font-size:0.95rem; font-weight:800; letter-spacing:0.3px;
+      transition:all 0.2s; margin-top:8px;
+    }
+    .btn-login-submit:hover { background:var(--brand-light); transform:translateY(-2px); box-shadow:0 12px 28px var(--brand-glow); }
+    .login-err { display:none; color:var(--danger); font-size:0.82rem; margin-top:12px; text-align:center; }
+    .login-err.show { display:block; animation:shake 0.4s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+    /* ── SIDEBAR ── */
+    #app { display:none; width:100%; height:100vh; }
+    .sidebar {
+      width:var(--sidebar-w); background:var(--surface);
+      border-right:1px solid var(--border);
+      display:flex; flex-direction:column;
+      height:100vh; flex-shrink:0;
+    }
+    .sidebar-logo {
+      padding:24px 20px;
+      display:flex; align-items:center; gap:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .sidebar-logo .logo-text {
+      font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800;
+      color:var(--text); letter-spacing:-0.8px;
+    }
+    .sidebar-logo .logo-text span { color:var(--brand); }
+    .admin-tag {
+      font-size:0.58rem; font-weight:800; letter-spacing:1px;
+      text-transform:uppercase; background:var(--brand-pale); color:var(--brand);
+      border:1px solid rgba(255,75,43,0.2); padding:2px 7px; border-radius:4px;
+      margin-left:4px; vertical-align:middle;
+    }
+    .sidebar-section-label {
+      padding:20px 20px 8px;
+      font-size:0.62rem; font-weight:700; letter-spacing:1px;
+      text-transform:uppercase; color:var(--muted);
+    }
+    .nav-item {
+      display:flex; align-items:center; gap:12px;
+      padding:11px 16px; margin:2px 10px;
+      border-radius:12px; color:var(--muted);
+      font-size:0.87rem; font-weight:600;
+      cursor:pointer; transition:all 0.2s; position:relative;
+    }
+    .nav-item i { width:18px; text-align:center; font-size:0.9rem; }
+    .nav-item:hover { background:var(--surface2); color:var(--text2); }
+    .nav-item.active { background:var(--brand-pale); color:var(--brand); }
+    .nav-item .badge-dot {
+      margin-left:auto; background:var(--brand); color:white;
+      font-size:0.6rem; font-weight:800; min-width:18px; height:18px;
+      border-radius:9px; display:flex; align-items:center; justify-content:center; padding:0 5px;
+    }
+    .sidebar-footer {
+      margin-top:auto; padding:16px 10px;
+      border-top:1px solid var(--border);
+    }
+    .admin-profile {
+      display:flex; align-items:center; gap:12px;
+      padding:12px 10px; border-radius:12px;
+      cursor:pointer; transition:background 0.2s; margin-bottom:8px;
+    }
+    .admin-profile:hover { background:var(--surface2); }
+    .admin-avt {
+      width:38px; height:38px; border-radius:10px;
+      background:linear-gradient(135deg,var(--brand) 0%,#FF8C42 100%);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Syne',sans-serif; font-weight:800; font-size:0.85rem; color:white;
+      flex-shrink:0;
+    }
+    .admin-info .aname { font-size:0.85rem; font-weight:700; color:var(--text); }
+    .admin-info .arole { font-size:0.7rem; color:var(--muted); }
+    .btn-logout {
+      display:flex; align-items:center; gap:10px; width:100%;
+      padding:10px 14px; border-radius:12px;
+      background:var(--danger-pale); color:var(--danger);
+      font-size:0.82rem; font-weight:700; transition:all 0.2s;
+    }
+    .btn-logout:hover { background:rgba(239,68,68,0.2); }
+
+    /* ── MAIN ── */
+    .main {
+      flex:1; height:100vh; overflow-y:auto;
+      background: radial-gradient(ellipse at 80% 10%, rgba(255,75,43,0.06) 0%, transparent 50%),
+      var(--bg);
+    }
+    .topbar {
+      position:sticky; top:0; z-index:100;
+      background:rgba(13,13,26,0.85); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      padding:0 32px; height:64px;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .topbar-left { display:flex; align-items:center; gap:16px; }
+    .topbar-title { font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700; }
+    .breadcrumb { font-size:0.78rem; color:var(--muted); }
+    .breadcrumb span { color:var(--brand); font-weight:600; }
+    .topbar-right { display:flex; align-items:center; gap:12px; }
+    .topbar-time { font-size:0.78rem; color:var(--muted); }
+    .notif-btn {
+      position:relative; width:38px; height:38px;
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:10px; display:flex; align-items:center; justify-content:center;
+      color:var(--muted); font-size:0.9rem; transition:all 0.2s;
+    }
+    .notif-btn:hover { border-color:var(--border2); color:var(--text); }
+    .notif-dot { position:absolute; top:7px; right:7px; width:7px; height:7px; border-radius:50%; background:var(--brand); border:2px solid var(--bg); }
+    .content-area { padding:32px; }
+
+    /* ── STATS GRID ── */
+    .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+    .stat-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; padding:24px 24px 20px;
+      position:relative; overflow:hidden; cursor:pointer;
+      transition:all 0.25s;
+    }
+    .stat-card:hover { transform:translateY(-4px); border-color:var(--border2); box-shadow:0 16px 40px rgba(0,0,0,0.3); }
+    .stat-card::after {
+      content:''; position:absolute;
+      width:100px; height:100px; bottom:-20px; right:-20px;
+      border-radius:50%; opacity:0.1;
+    }
+    .stat-card.brand-c::after { background:var(--brand); }
+    .stat-card.success-c::after { background:var(--success); }
+    .stat-card.warning-c::after { background:var(--warning); }
+    .stat-card.info-c::after { background:var(--info); }
+    .stat-icon {
+      width:44px; height:44px; border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem; margin-bottom:20px;
+    }
+    .stat-card.brand-c .stat-icon { background:var(--brand-pale); color:var(--brand); }
+    .stat-card.success-c .stat-icon { background:var(--success-pale); color:var(--success); }
+    .stat-card.warning-c .stat-icon { background:var(--warning-pale); color:var(--warning); }
+    .stat-card.info-c .stat-icon { background:var(--info-pale); color:var(--info); }
+    .stat-label { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin-bottom:6px; }
+    .stat-value { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:var(--text); line-height:1; }
+    .stat-delta {
+      display:inline-flex; align-items:center; gap:4px;
+      font-size:0.72rem; font-weight:700; margin-top:8px;
+      padding:3px 8px; border-radius:6px;
+    }
+    .delta-up { background:var(--success-pale); color:var(--success); }
+    .delta-down { background:var(--danger-pale); color:var(--danger); }
+
+    /* ── GRID LAYOUT ── */
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+    .grid-3-2 { display:grid; grid-template-columns:3fr 2fr; gap:20px; margin-bottom:20px; }
+    .full-row { margin-bottom:20px; }
+
+    /* ── CARD ── */
+    .card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:20px; overflow:hidden;
+    }
+    .card-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:20px 24px; border-bottom:1px solid var(--border);
+    }
+    .card-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; }
+    .card-sub { font-size:0.75rem; color:var(--muted); margin-top:2px; }
+    .card-body { padding:24px; }
+    .card-body.no-pad { padding:0; }
+
+    /* ── CHART ── */
+    .chart-wrap { padding:20px 24px; }
+    .chart-bars {
+      display:flex; align-items:flex-end; gap:8px; height:160px;
+    }
+    .chart-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .chart-bar-outer { flex:1; width:100%; display:flex; align-items:flex-end; }
+    .chart-bar-inner {
+      width:100%; border-radius:6px 6px 0 0;
+      transition:height 1s cubic-bezier(0.4,0,0.2,1);
+      min-height:6px; position:relative; cursor:pointer;
+    }
+    .chart-bar-inner:hover { filter:brightness(1.2); }
+    .chart-bar-inner.brand-bar { background:linear-gradient(to top, var(--brand) 0%, #FF8C42 100%); }
+    .chart-bar-inner.dim-bar { background:var(--surface3); }
+    .chart-day { font-size:0.62rem; color:var(--muted); font-weight:700; text-transform:uppercase; }
+    .chart-tip {
+      position:absolute; bottom:calc(100% + 6px); left:50%; transform:translateX(-50%);
+      background:var(--surface3); border:1px solid var(--border2);
+      color:var(--text); font-size:0.7rem; font-weight:700;
+      padding:4px 8px; border-radius:6px; white-space:nowrap;
+      opacity:0; pointer-events:none; transition:opacity 0.15s;
+    }
+    .chart-bar-inner:hover .chart-tip { opacity:1; }
+    .chart-legend {
+      display:flex; gap:16px; padding:12px 24px 20px;
+      border-top:1px solid var(--border);
+    }
+    .legend-item { display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--muted); }
+    .legend-dot { width:8px; height:8px; border-radius:2px; }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; }
+    th {
+      padding:12px 20px; font-size:0.68rem; font-weight:800;
+      text-transform:uppercase; letter-spacing:0.5px;
+      color:var(--muted); background:var(--surface2);
+      text-align:left; white-space:nowrap;
+    }
+    td { padding:14px 20px; border-top:1px solid var(--border); font-size:0.86rem; vertical-align:middle; }
+    tr:hover td { background:rgba(255,255,255,0.015); }
+    .td-bold { font-weight:700; color:var(--text); }
+    .td-muted { color:var(--muted); font-size:0.78rem; }
+    .td-mono { font-family:monospace; font-size:0.82rem; color:var(--text2); letter-spacing:0.3px; }
+
+    /* ── BADGE / PILL ── */
+    .pill {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:4px 10px; border-radius:8px; font-size:0.7rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:0.3px;
+    }
+    .pill-brand { background:var(--brand-pale); color:var(--brand); }
+    .pill-success { background:var(--success-pale); color:var(--success); }
+    .pill-warning { background:var(--warning-pale); color:var(--warning); }
+    .pill-danger { background:var(--danger-pale); color:var(--danger); }
+    .pill-info { background:var(--info-pale); color:var(--info); }
+    .pill-muted { background:var(--surface3); color:var(--muted); }
+    .pill::before { content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 18px; border-radius:10px;
+      font-size:0.82rem; font-weight:700; transition:all 0.2s;
+    }
+    .btn-sm { padding:6px 12px; font-size:0.75rem; border-radius:8px; }
+    .btn-brand { background:var(--brand); color:white; }
+    .btn-brand:hover { background:var(--brand-light); transform:translateY(-1px); box-shadow:0 6px 16px var(--brand-glow); }
+    .btn-ghost { background:var(--surface2); color:var(--text2); border:1px solid var(--border); }
+    .btn-ghost:hover { background:var(--surface3); border-color:var(--border2); }
+    .btn-success { background:var(--success-pale); color:var(--success); }
+    .btn-success:hover { background:rgba(0,200,150,0.2); }
+    .btn-danger { background:var(--danger-pale); color:var(--danger); }
+    .btn-danger:hover { background:rgba(239,68,68,0.2); }
+    .btn-icon { width:34px; height:34px; padding:0; justify-content:center; }
+
+    /* ── STATUS SELECT ── */
+    .status-select {
+      background:var(--surface2); border:1px solid var(--border);
+      color:var(--text); border-radius:8px; padding:6px 10px;
+      font-size:0.78rem; font-weight:600; cursor:pointer;
+    }
+
+    /* ── RIDER CARD ── */
+    .rider-card {
+      display:flex; align-items:center; gap:14px;
+      padding:16px; border:1px solid var(--border); border-radius:14px;
+      margin-bottom:12px; transition:border-color 0.2s;
+    }
+    .rider-card:hover { border-color:var(--border2); }
+    .rider-avt-small {
+      width:44px; height:44px; border-radius:12px; flex-shrink:0;
+      background:linear-gradient(135deg, var(--brand) 0%,#FF8C42 100%);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Syne',sans-serif; font-weight:800; font-size:0.9rem; color:white;
+    }
+    .online-dot { width:8px; height:8px; border-radius:50%; background:var(--success); flex-shrink:0; box-shadow:0 0 6px var(--success); }
+    .offline-dot { width:8px; height:8px; border-radius:50%; background:var(--muted); flex-shrink:0; }
+
+    /* ── MINI STAT ROW ── */
+    .mini-stat-row { display:flex; gap:16px; padding:16px 24px; border-bottom:1px solid var(--border); }
+    .mini-stat { text-align:center; flex:1; }
+    .mini-val { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; }
+    .mini-val.brand { color:var(--brand); }
+    .mini-val.success { color:var(--success); }
+    .mini-val.warning { color:var(--warning); }
+    .mini-lbl { font-size:0.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
+
+    /* ── DONUT ── */
+    .donut-wrap { display:flex; align-items:center; gap:24px; padding:20px 24px; }
+    .donut-svg { flex-shrink:0; }
+    .donut-legend { flex:1; display:flex; flex-direction:column; gap:10px; }
+    .dl-row { display:flex; align-items:center; justify-content:space-between; }
+    .dl-label { display:flex; align-items:center; gap:8px; font-size:0.8rem; color:var(--text2); }
+    .dl-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+    .dl-val { font-size:0.85rem; font-weight:700; }
+
+    /* ── REVIEW CARD ── */
+    .review-card {
+      padding:16px; border:1px solid var(--border); border-radius:14px; margin-bottom:10px;
+    }
+    .review-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+    .review-avt {
+      width:32px; height:32px; border-radius:8px; flex-shrink:0;
+      background:var(--surface3); display:flex; align-items:center; justify-content:center;
+      font-size:0.75rem; font-weight:800; color:var(--text2);
+    }
+    .review-stars { color:#FFB800; font-size:0.75rem; letter-spacing:1px; }
+    .review-text { font-size:0.83rem; color:var(--text2); font-style:italic; line-height:1.5; }
+
+    /* ── MENU ITEM ── */
+    .menu-item {
+      display:flex; align-items:center; gap:14px;
+      padding:14px; border:1px solid var(--border); border-radius:14px; margin-bottom:10px;
+      transition:border-color 0.2s;
+    }
+    .menu-item:hover { border-color:var(--border2); }
+    .menu-img { width:52px; height:52px; border-radius:10px; object-fit:cover; flex-shrink:0; background:var(--surface3); }
+    .menu-name { font-weight:700; font-size:0.9rem; }
+    .menu-price { font-family:'Syne',sans-serif; font-weight:800; color:var(--brand); font-size:0.95rem; }
+
+    /* ── USER ROW ── */
+    .user-avt-sm {
+      width:32px; height:32px; border-radius:8px;
+      background:var(--surface3); display:flex; align-items:center; justify-content:center;
+      font-size:0.72rem; font-weight:800; color:var(--text2); flex-shrink:0;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+      display:flex; align-items:center; justify-content:center; z-index:8000;
+      opacity:0; pointer-events:none; transition:opacity 0.25s;
+    }
+    .modal-overlay.open { opacity:1; pointer-events:all; }
+    .modal-box {
+      background:var(--surface); border:1px solid var(--border2);
+      border-radius:24px; padding:36px; max-width:480px; width:90%;
+      box-shadow:0 40px 80px rgba(0,0,0,0.5);
+      transform:translateY(20px) scale(0.96); transition:all 0.25s;
+    }
+    .modal-overlay.open .modal-box { transform:translateY(0) scale(1); }
+    .modal-title { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; margin-bottom:6px; }
+    .modal-sub { font-size:0.85rem; color:var(--muted); margin-bottom:28px; }
+    .modal-footer { display:flex; gap:12px; margin-top:28px; }
+
+    /* ── SEARCH ── */
+    .search-bar {
+      display:flex; align-items:center; gap:10px;
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:12px; padding:10px 16px; width:260px;
+      transition:all 0.2s;
+    }
+    .search-bar:focus-within { border-color:var(--brand); background:var(--surface3); box-shadow:0 0 0 3px var(--brand-pale); }
+    .search-bar input { background:transparent; border:none; color:var(--text); font-size:0.85rem; flex:1; }
+    .search-bar i { color:var(--muted); font-size:0.85rem; }
+
+    /* ── TOAST ── */
+    #toast {
+      position:fixed; bottom:28px; right:28px; z-index:9999;
+      background:var(--surface3); border:1px solid var(--border2);
+      color:var(--text); padding:14px 20px; border-radius:14px;
+      font-size:0.85rem; font-weight:600;
+      display:flex; align-items:center; gap:10px;
+      box-shadow:0 16px 40px rgba(0,0,0,0.4);
+      transform:translateY(80px); opacity:0; transition:all 0.3s cubic-bezier(0.18,0.89,0.32,1.28);
+    }
+    #toast.show { transform:translateY(0); opacity:1; }
+    .toast-icon { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; }
+    .toast-icon.success { background:var(--success-pale); color:var(--success); }
+    .toast-icon.danger { background:var(--danger-pale); color:var(--danger); }
+
+    /* ── ANIM ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .fade-up { animation:fadeUp 0.35s ease forwards; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1100px) { .stats-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:860px) { .grid-2,.grid-3-2 { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-wrap">
+    <div class="login-promo">
+      <div>
+        <div class="login-promo-logo">Food<span>Go</span></div>
+      </div>
+      <div>
+        <div class="admin-badge"><i class="fas fa-shield-alt"></i> Admin Portal</div>
+        <h2>Command<br>your <em>empire</em>.</h2>
+        <p>Full-stack visibility across orders, riders, menu, and customers — all in one place.</p>
+      </div>
+      <div class="promo-stats">
+        <div>
+          <div class="ps-val brand">98%</div>
+          <div class="ps-lbl">Delivery Rate</div>
+        </div>
+        <div>
+          <div class="ps-val">4.8★</div>
+          <div class="ps-lbl">Avg Rating</div>
+        </div>
+        <div>
+          <div class="ps-val">24/7</div>
+          <div class="ps-lbl">Operations</div>
+        </div>
+      </div>
+    </div>
+    <div class="login-form-wrap">
+      <h3>Welcome back</h3>
+      <p class="sub">Sign in to access the control center</p>
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="uname" value="admin" placeholder="admin">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="upass" value="admin123" placeholder="••••••••">
+        <div class="hint">Default: admin / admin123</div>
+      </div>
+      <button class="btn-login-submit" onclick="doLogin()">
+        <i class="fas fa-arrow-right" style="margin-right:8px"></i> Access Dashboard
+      </button>
+      <div class="login-err" id="login-err">⚠ Invalid credentials. Try admin / admin123</div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div style="width:36px;height:36px;border-radius:10px;background:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i class="fas fa-fire" style="color:white;font-size:0.95rem"></i>
+      </div>
+      <div>
+        <div class="logo-text">Food<span>Go</span><span class="admin-tag">Admin</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-section-label">Main</div>
+    <div class="nav-item active" onclick="nav('dashboard')" data-page="dashboard">
+      <i class="fas fa-chart-pie"></i> Dashboard
+    </div>
+    <div class="nav-item" onclick="nav('orders')" data-page="orders">
+      <i class="fas fa-receipt"></i> Live Orders
+      <span class="badge-dot" id="orders-dot">2</span>
+    </div>
+    <div class="nav-item" onclick="nav('menu')" data-page="menu">
+      <i class="fas fa-utensils"></i> Menu Catalog
+    </div>
+
+    <div class="sidebar-section-label">People</div>
+    <div class="nav-item" onclick="nav('users')" data-page="users">
+      <i class="fas fa-users"></i> Customers
+    </div>
+    <div class="nav-item" onclick="nav('riders')" data-page="riders">
+      <i class="fas fa-motorcycle"></i> Riders Fleet
+    </div>
+
+    <div class="sidebar-section-label">Insights</div>
+    <div class="nav-item" onclick="nav('reviews')" data-page="reviews">
+      <i class="fas fa-star"></i> Reviews
+    </div>
+    <div class="nav-item" onclick="nav('payments')" data-page="payments">
+      <i class="fas fa-credit-card"></i> Payments
+    </div>
+    <div class="nav-item" onclick="nav('analytics')" data-page="analytics">
+      <i class="fas fa-chart-bar"></i> Analytics
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="admin-profile">
+        <div class="admin-avt">AD</div>
+        <div class="admin-info">
+          <div class="aname">Admin</div>
+          <div class="arole">Super Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div>
+          <div class="topbar-title" id="topbar-title">Dashboard</div>
+          <div class="breadcrumb">FoodGo / <span id="topbar-crumb">Overview</span></div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="live-time"></div>
+        <button class="notif-btn"><i class="fas fa-bell"></i><div class="notif-dot"></div></button>
+        <div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#FF8C42);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:white;cursor:pointer">AD</div>
+      </div>
+    </div>
+    <div class="content-area" id="page-content"></div>
+  </main>
+</div>
+
+<!-- ADD MENU MODAL -->
+<div class="modal-overlay" id="menu-modal">
+  <div class="modal-box" style="max-width:500px;max-height:90vh;overflow-y:auto">
+    <div class="modal-title" id="menu-modal-title">Add Menu Item</div>
+    <div class="modal-sub" id="menu-modal-sub">New item will appear in the customer catalog immediately</div>
+    <input type="hidden" id="m-edit-id">
+    <div class="field">
+      <label>Item Name *</label>
+      <input type="text" id="m-name" placeholder="e.g. Spicy Chicken Zinger" style="width:100%;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text)">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="field">
+        <label>Price (LKR) *</label>
+        <input type="number" step="0.01" id="m-price" placeholder="450.00" style="width:100%;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text)">
+      </div>
+      <div class="field">
+        <label>Category *</label>
+        <select id="m-cat" style="width:100%;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text)">
+          <option value="Pizza">🍕 Pizza</option><option value="Chicken">🍗 Chicken</option>
+          <option value="Salad">🥗 Salad</option><option value="Burgers">🍔 Burgers</option>
+          <option value="Noodles">🍜 Noodles</option><option value="Sushi">🍣 Sushi</option>
+          <option value="Desserts">🍰 Desserts</option><option value="Drinks">🥤 Drinks</option>
+          <option value="Rice">🍚 Rice</option><option value="Seafood">🦐 Seafood</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="m-desc" placeholder="Short description of the item…" rows="2" style="width:100%;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);resize:vertical"></textarea>
+    </div>
+    <div class="field">
+      <label>Image URL</label>
+      <input type="url" id="m-img" placeholder="https://…  (leave blank for default)" style="width:100%;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text)">
+      <div id="m-img-preview" style="margin-top:8px;display:none"><img id="m-img-thumb" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:2px solid var(--border)"></div>
+    </div>
+    <div class="field" style="display:flex;align-items:center;gap:12px">
+      <label style="margin:0">Available</label>
+      <label style="position:relative;display:inline-block;width:44px;height:24px">
+        <input type="checkbox" id="m-avail" checked style="opacity:0;width:0;height:0">
+        <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--surface3);border-radius:34px;transition:.3s" id="m-avail-slider"></span>
+      </label>
+      <span id="m-avail-label" style="font-size:.82rem;color:var(--muted)">Available</span>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeMenuModal()">Cancel</button>
+      <button class="btn btn-brand" style="flex:1" id="menu-save-btn" onclick="saveMenuItem()"><i class="fas fa-plus"></i> Add Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <div class="toast-icon success" id="toast-icon"><i class="fas fa-check"></i></div>
+  <span id="toast-msg">Done!</span>
+</div>
+
+<script>
+  // ── DATA ──────────────────────────────────────────────────────────────────────
+  const SEED = { users: [], riders: [], menu: [], orders: [], reviews: [] };
+
+  // ── API & Storage ───────────────────────────────────────────────
+  const API_BASE = '/api';
+  let adminUser = null;
+
+  // Persist SEED to localStorage so dashboard survives refresh
+  function G(k) { return SEED[k] || []; }
+  function S(k, v) {
+    SEED[k] = v;
+    try { localStorage.setItem('foodgo_seed_' + k, JSON.stringify(v)); } catch(e) {}
+  }
+  function loadSeedCache() {
+    ['users','riders','menu','orders','reviews'].forEach(function(k) {
+      try {
+        var cached = localStorage.getItem('foodgo_seed_' + k);
+        if (cached) SEED[k] = JSON.parse(cached);
+      } catch(e) {}
+    });
+  }
+  function clearSeedCache() {
+    ['users','riders','menu','orders','reviews'].forEach(function(k) {
+      localStorage.removeItem('foodgo_seed_' + k);
+    });
+  }
+  function initDB() { loadSeedCache(); }
+
+  // ── AUTH ─────────────────────────────────────────────────────────────────────
+  async function doLogin() {
+    const u = document.getElementById('uname').value.trim();
+    const p = document.getElementById('upass').value.trim();
+    const err = document.getElementById('login-err');
+    try {
+      const loginRes = await fetch(`${API_BASE}/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      const loginData = await loginRes.json();
+      if (loginRes.ok && loginData.status === 'success') {
+      adminUser = { username: u, logged: true };
+      localStorage.setItem('foodgo_admin', JSON.stringify(adminUser));
+      clearSeedCache(); // Clear stale cache on fresh login
+      try {
+        const [usersRes, ridersRes, ordersRes, reviewsRes] = await Promise.all([
+          fetch(`${API_BASE}/users`),
+          fetch(`${API_BASE}/admin/riders`),
+          fetch(`${API_BASE}/orders`),
+          fetch(`${API_BASE}/admin/reviews`)
+        ]);
+
+        if(usersRes.ok) {
+          const usersData = await usersRes.json();
+          const users = (usersData.data && usersData.data.users) ? usersData.data.users : [];
+          S('users', users.map(u => ({
+            id: u.id, name: u.name, email: u.email,
+            date: 'Registered', orders: 0, spent: 0.00
+          })));
+        }
+        if(ridersRes.ok) {
+          const ridersData = await ridersRes.json();
+          const riders = (ridersData.data && ridersData.data.riders) ? ridersData.data.riders : [];
+          S('riders', riders);
+        } else {
+          // Fallback: old server uses /api/riders (no approval fields)
+          try {
+            const fallbackRes = await fetch(`${API_BASE}/riders`);
+            if(fallbackRes.ok){
+              const fd = await fallbackRes.json();
+              const fr = (fd.data && fd.data.riders) ? fd.data.riders : [];
+              S('riders', fr);
+            }
+          } catch(fe){ console.log('Riders fallback failed', fe); }
+        }
+        if(ordersRes.ok) {
+          const ordersData = await ordersRes.json();
+          const orders = (ordersData.data && ordersData.data.orders) ? ordersData.data.orders : [];
+          S('orders', orders.map(mapRawOrder));
+        }
+        if(reviewsRes.ok) {
+          const reviewsData = await reviewsRes.json();
+          const reviews = (reviewsData.data && reviewsData.data.reviews) ? reviewsData.data.reviews : [];
+          S('reviews', reviews.map(r => ({...r, user: r.userName || 'Customer', date: r.createdAt ? new Date(r.createdAt).toLocaleString() : '-'})));
+        } else {
+          // Fallback: old server uses /api/reviews
+          try {
+            const rFallback = await fetch(`${API_BASE}/reviews`);
+            if(rFallback.ok){
+              const rfd = await rFallback.json();
+              const rfr = (rfd.data && rfd.data.reviews) ? rfd.data.reviews : [];
+              S('reviews', rfr.map(r => ({...r, user: r.userName || 'Customer', date: r.createdAt ? new Date(r.createdAt).toLocaleString() : '-'})));
+            }
+          } catch(re){ console.log('Reviews fallback failed', re); }
+        }
+      } catch(e) { console.log('Could not load data from API', e); }
+
+      const ls = document.getElementById('login-screen');
+      ls.style.opacity = '0'; ls.style.pointerEvents = 'none';
+      setTimeout(() => {
+        ls.style.display = 'none';
+        const app = document.getElementById('app');
+        app.style.display = 'flex';
+        initDB(); nav('dashboard'); startClock();
+      }, 500);
+      } else {
+        err.className = 'login-err show';
+        err.textContent = loginData.message || 'Invalid credentials';
+        setTimeout(() => err.className = 'login-err', 2000);
+      }
+    } catch(e) {
+      err.className = 'login-err show';
+      setTimeout(() => err.className = 'login-err', 2000);
+    }
+  }
+
+  function doLogout() {
+    if(confirm('Sign out from admin panel?')) {
+      adminUser = null;
+      localStorage.removeItem('foodgo_admin');
+      clearSeedCache();
+      location.reload();
+    }
+  }
+
+  document.getElementById('upass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+  document.getElementById('uname').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+
+  // Restore admin session from localStorage on page load
+  (function restoreAdminSession() {
+    try {
+      loadSeedCache(); // Load cached data immediately so dashboard isn't blank
+      const stored = localStorage.getItem('foodgo_admin');
+      if (stored) {
+        adminUser = JSON.parse(stored);
+        if (adminUser && adminUser.logged) {
+          // Show app immediately with cached data, then refresh from API
+          const ls = document.getElementById('login-screen');
+          if(ls) ls.style.display = 'none';
+          const appEl = document.getElementById('app');
+          if(appEl) appEl.style.display = 'flex';
+          initDB(); nav('dashboard'); startClock();
+          // Re-fetch live data in background
+          (async () => {
+            try {
+              const [usersRes, ridersRes, ordersRes, reviewsRes] = await Promise.all([
+                fetch(`${API_BASE}/users`),
+                fetch(`${API_BASE}/admin/riders`),
+                fetch(`${API_BASE}/orders`),
+                fetch(`${API_BASE}/admin/reviews`)
+              ]);
+              if(usersRes.ok) {
+                const d = await usersRes.json();
+                const users = (d.data && d.data.users) ? d.data.users : [];
+                S('users', users.map(u => ({ id: u.id, name: u.name, email: u.email, date: 'Registered', orders: 0, spent: 0.00 })));
+              }
+              if(ridersRes.ok) {
+                const d = await ridersRes.json();
+                const riders = (d.data && d.data.riders) ? d.data.riders : [];
+                S('riders', riders);
+              }
+              if(ordersRes.ok) {
+                const d = await ordersRes.json();
+                const orders = (d.data && d.data.orders) ? d.data.orders : [];
+                S('orders', orders.map(mapRawOrder));
+              }
+              if(reviewsRes.ok) {
+                const d = await reviewsRes.json();
+                const reviews = (d.data && d.data.reviews) ? d.data.reviews : [];
+                S('reviews', reviews.map(r => ({ id: r.id, user: r.userName || 'Customer', rating: r.rating, comment: r.comment || '', date: r.createdAt ? new Date(r.createdAt).toLocaleString() : '-' })));
+              }
+            } catch(e) { console.log('Data refresh failed on restore', e); }
+
+            // Silently refresh current page stats with live data
+            var curPage = document.querySelector('.nav-item.active');
+            var page = curPage ? curPage.dataset.page : 'dashboard';
+            if(page === 'dashboard') renderDashboard();
+            else if(page === 'orders') renderOrders();
+            updateBadge();
+          })();
+        }
+      }
+    } catch(e) {
+      console.error('Admin session restore failed', e);
+      localStorage.removeItem('foodgo_admin');
+    }
+  })();
+
+  // ── CLOCK ────────────────────────────────────────────────────────────────────
+  function startClock() {
+    function tick() {
+      const now = new Date();
+      document.getElementById('live-time').textContent =
+              now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    }
+    tick(); setInterval(tick, 1000);
+  }
+
+  // ── NAVIGATION ────────────────────────────────────────────────────────────────
+  const PAGE_TITLES = {
+    dashboard:'Dashboard', orders:'Live Orders', menu:'Menu Catalog',
+    users:'Customers', riders:'Riders Fleet', reviews:'Reviews', analytics:'Analytics', payments:'Payments'
+  };
+  const PAGE_CRUMBS = {
+    dashboard:'Overview', orders:'Order Management', menu:'Item Management',
+    users:'Account Management', riders:'Fleet Management', reviews:'Feedback', analytics:'Performance', payments:'Payment History'
+  };
+
+  function nav(page) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page===page));
+    document.getElementById('topbar-title').textContent = PAGE_TITLES[page] || page;
+    document.getElementById('topbar-crumb').textContent = PAGE_CRUMBS[page] || page;
+    const c = document.getElementById('page-content');
+    c.style.opacity = '0';
+    setTimeout(() => {
+      c.innerHTML = '';
+      ({dashboard:renderDashboard,orders:renderOrders,menu:renderMenu,
+        users:renderUsers,riders:renderRiders,reviews:renderReviews,analytics:renderAnalytics,payments:renderPayments}[page]||renderDashboard)();
+      c.style.opacity = '1'; c.style.transition = 'opacity 0.3s';
+      c.classList.remove('fade-up'); void c.offsetWidth; c.classList.add('fade-up');
+    }, 120);
+  }
+
+  // ── DASHBOARD ────────────────────────────────────────────────────────────────
+  function renderDashboard() {
+    const orders = G('orders'), users = G('users'), riders = G('riders'), reviews = G('reviews');
+    var revenue  = orders.filter(function(o){ return o.status==='delivered'; }).reduce(function(s,o){ return s+normalizeOrderTotal(o.total); }, 0);
+    var codTotal = orders.filter(function(o){ return (o.method==='cod'||o.method==='cash'||o.paymentMethod==='cod') && o.status==='delivered'; }).reduce(function(s,o){ return s+normalizeOrderTotal(o.total); }, 0);
+    const active = orders.filter(function(o){ return ['pending','accepted','preparing','ready','picked'].includes(o.status); }).length;
+    const online = riders.filter(function(r){ return r.online && (r.approvalStatus==='approved'||r.status==='approved'); }).length;
+    const avgR = reviews.length ? (reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1) : '—';
+
+    const dayLabels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const buckets = dayLabels.map(d => ({ d, v: 0 }));
+    orders.forEach(o => {
+      const amt = typeof o.total === 'number' ? o.total : (parseFloat(o.total)||0);
+      const dt = o.createdAt ? new Date(o.createdAt) : null;
+      const day = dt && !isNaN(dt) ? dt.getDay() : new Date().getDay();
+      buckets[day].v += amt;
+    });
+    const WEEKLY = buckets.map(b => ({ d: b.d, v: b.v, e: b.v ? 'Rs.' + Math.round(b.v) : '—' }));
+    const maxV = Math.max(1, ...WEEKLY.map(d => d.v));
+
+    const c = document.getElementById('page-content');
+    c.innerHTML = `
+  <div class="stats-grid">
+    <div class="stat-card brand-c">
+      <div class="stat-icon"><i class="fas fa-fire-alt"></i></div>
+      <div class="stat-label">Total Revenue</div>
+      <div class="stat-value">Rs. ${revenue.toFixed(0)}</div>
+      <div class="stat-delta delta-up"><i class="fas fa-money-bill-wave"></i> COD: Rs. ${codTotal.toFixed(0)}</div>
+    </div>
+    <div class="stat-card success-c">
+      <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+      <div class="stat-label">Active Orders</div>
+      <div class="stat-value">${active}</div>
+      <div class="stat-delta delta-up"><i class="fas fa-arrow-up"></i> ${orders.length} total today</div>
+    </div>
+    <div class="stat-card warning-c">
+      <div class="stat-icon"><i class="fas fa-users"></i></div>
+      <div class="stat-label">Total Customers</div>
+      <div class="stat-value">${users.length}</div>
+      <div class="stat-delta delta-up"><i class="fas fa-arrow-up"></i> +2 new today</div>
+    </div>
+    <div class="stat-card info-c">
+      <div class="stat-icon"><i class="fas fa-motorcycle"></i></div>
+      <div class="stat-label">Online Riders</div>
+      <div class="stat-value">${online}</div>
+      <div class="stat-delta ${online>0?'delta-up':'delta-down'}">
+        <i class="fas ${online>0?'fa-circle':'fa-circle'}" style="font-size:0.5rem"></i> of ${riders.filter(function(r){ return r.approvalStatus==='approved'||r.status==='approved'; }).length} fleet active
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3-2">
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Weekly Revenue</div><div class="card-sub">Past 7 days performance</div></div>
+        <span class="pill pill-success">↑ High Performance</span>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-bars">
+          ${WEEKLY.map((d,i)=>`
+          <div class="chart-col">
+            <div class="chart-bar-outer">
+              <div class="chart-bar-inner ${i===4?'brand-bar':'dim-bar'}" style="height:${(d.v/maxV*100).toFixed(0)}%">
+                <div class="chart-tip">${d.e}</div>
+              </div>
+            </div>
+            <div class="chart-day">${d.d}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--brand)"></div> This week</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--surface3)"></div> Last week</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Order Status Mix</div><div class="card-sub">Real-time breakdown</div></div>
+      </div>
+      <div class="donut-wrap">
+        <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--surface2)" stroke-width="18"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--success)" stroke-width="18"
+            stroke-dasharray="${(1/4)*301.6} ${301.6}" stroke-dashoffset="${301.6*0.25}" stroke-linecap="round"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--warning)" stroke-width="18"
+            stroke-dasharray="${(2/4)*301.6} ${301.6}" stroke-dashoffset="${301.6*(-0.0)}" stroke-linecap="round"/>
+          <circle cx="60" cy="60" r="48" fill="none" stroke="var(--brand)" stroke-width="18"
+            stroke-dasharray="${(0.5/4)*301.6} ${301.6}" stroke-dashoffset="${301.6*(-0.5)}" stroke-linecap="round"/>
+          <text x="60" y="64" text-anchor="middle" font-family="Syne" font-size="16" font-weight="800" fill="white">${orders.length}</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="dl-row"><div class="dl-label"><div class="dl-dot" style="background:var(--success)"></div> Delivered</div><div class="dl-val">${orders.filter(o=>o.status==='Delivered').length}</div></div>
+          <div class="dl-row"><div class="dl-label"><div class="dl-dot" style="background:var(--warning)"></div> Preparing</div><div class="dl-val">${orders.filter(o=>o.status==='Preparing').length}</div></div>
+          <div class="dl-row"><div class="dl-label"><div class="dl-dot" style="background:var(--brand)"></div> On the way</div><div class="dl-val">${orders.filter(o=>o.status==='On the way').length}</div></div>
+          <div class="dl-row"><div class="dl-label"><div class="dl-dot" style="background:var(--info)"></div> Confirmed</div><div class="dl-val">${orders.filter(o=>o.status==='Confirmed').length}</div></div>
+        </div>
+      </div>
+      <div class="mini-stat-row">
+        <div class="mini-stat"><div class="mini-val brand">${avgR}★</div><div class="mini-lbl">Avg Rating</div></div>
+        <div class="mini-stat"><div class="mini-val success">98%</div><div class="mini-lbl">Delivery Rate</div></div>
+        <div class="mini-stat"><div class="mini-val warning">18m</div><div class="mini-lbl">Avg Time</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Recent Orders</div><div class="card-sub">Latest incoming</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="nav('orders')">View All <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="card-body no-pad">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              ${orders.slice(0,5).map(o=>`
+              <tr>
+                <td class="td-mono" style="font-size:.72rem">${String(o.id||'').slice(-8)}</td>
+                <td class="td-bold">${o.customer||'—'}</td>
+                <td style="color:var(--brand);font-weight:700;white-space:nowrap">LKR ${normalizeOrderTotal(o.total).toFixed(0)}</td>
+                <td>${statusPill(o.status||'pending')}</td>
+              </tr>`).join('')}
+              ${orders.length===0?'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:20px">No orders yet</td></tr>':''}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Fleet Status</div><div class="card-sub">Active riders</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="nav('riders')">Manage <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="card-body">
+        ${riders.slice(0,3).map(r=>`
+        <div class="rider-card">
+          <div class="rider-avt-small">${r.name.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:0.88rem">${r.name}</div>
+            <div class="td-muted">${r.bikeModel||(r.bike_model?r.bike_model:'No vehicle info')}</div>
+          </div>
+          ${(r.online) ? '<div class="online-dot"></div>' : '<div class="offline-dot"></div>'}
+          ${(r.approvalStatus==='rejected'||r.status==='rejected')
+            ? '<span class="pill pill-danger">Rejected</span>'
+            : (r.approvalStatus==='pending'&&(r.vehicleDetailsSubmitted||r.documentsSubmitted))
+                    ? '<span class="pill pill-warning">Pending</span>'
+                    : r.online
+                            ? '<span class="pill pill-success">Online</span>'
+                            : '<span class="pill pill-muted">Offline</span>'
+          }
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+  }
+
+  // ── ORDERS ───────────────────────────────────────────────────────────────────
+  function formatMenuPrice(p) {
+    var n = parseFloat(p)||0;
+    return n === Math.floor(n) ? n.toFixed(0) : n.toFixed(2);
+  }
+
+  // ── ORDER ROW RENDERER ──────────────────────────────────────────────────────
+  function renderOrderRow(o) {
+    // Include all riders (old server format may not have approvalStatus field)
+    var riders = G('riders').filter(function(r){
+      return !r.approvalStatus || r.approvalStatus==='approved' || r.status==='approved';
+    });
+    var tot = normalizeOrderTotal(o.total);
+    var riderOpts = '<option value="">— Assign Rider —</option>' +
+      riders.map(function(r){
+        return '<option value="' + r.id + '"' + (o.assignedRiderId===r.id?' selected':'') + '>' + (r.name||r.id) + '</option>';
+      }).join('');
+    var statusOpts = ORDER_STATUSES.map(function(s){
+      return '<option value="' + s + '"' + (s===o.status?' selected':'') + '>' + (STATUS_LABELS[s]||s) + '</option>';
+    }).join('');
+    var actions = '';
+    if(o.status==='pending'){
+      actions += '<button class="btn btn-success btn-sm" title="Quick Accept" onclick="quickAcceptOrder(\'' + o.id + '\')"><i class="fas fa-check"></i></button> ';
+    }
+    actions += '<button class="btn btn-danger btn-sm" title="Cancel" onclick="cancelOrder(\'' + o.id + '\')"><i class="fas fa-times"></i></button>';
+    return '<tr data-search="' + String(o.id||'').toLowerCase() + ' ' + String(o.customer||'').toLowerCase() + '">' +
+      '<td class="td-mono" style="font-size:.75rem">' + String(o.id||'').slice(-8) + '</td>' +
+      '<td class="td-bold">' + (o.customer||'—') + '</td>' +
+      '<td class="td-muted" style="font-size:.78rem;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (o.address||'—') + '</td>' +
+      '<td class="td-muted" style="font-size:.75rem;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (o.items||'—') + '</td>' +
+      '<td style="color:var(--brand);font-weight:700;white-space:nowrap">LKR ' + tot.toFixed(2) + '</td>' +
+      '<td><span class="pill ' + (o.method==='card'?'pill-info':'pill-muted') + '" style="font-size:.68rem">' + String(o.method||'cash').toUpperCase() + '</span></td>' +
+      '<td><select class="status-select" onchange="updateOrder(\'' + o.id + '\',this.value)">' + statusOpts + '</select></td>' +
+      '<td><select class="status-select" style="min-width:110px" onchange="assignOrderRider(\'' + o.id + '\',this.value)">' + riderOpts + '</select></td>' +
+      '<td class="td-muted" style="font-size:.75rem">' + (o.time||'—') + '</td>' +
+      '<td>' + actions + '</td>' +
+      '</tr>';
+  }
+
+  // ── ORDER STATUS CONSTANTS (match backend exactly) ──────────────────────────
+  const ORDER_STATUSES = ['pending','accepted','preparing','ready','picked','delivered','cancelled'];
+  const STATUS_LABELS  = {pending:'Pending',accepted:'Accepted',preparing:'Preparing',ready:'Ready',picked:'Picked Up',delivered:'Delivered',cancelled:'Cancelled'};
+  const STATUS_COLORS  = {pending:'pill-warning',accepted:'pill-info',preparing:'pill-brand',ready:'pill-success',picked:'pill-brand',delivered:'pill-success',cancelled:'pill-danger'};
+
+  function normalizeOrderTotal(raw) {
+    // Backend stores raw LKR values (e.g. 450.0). Never divide by 100.
+    return typeof raw === 'number' ? raw : parseFloat(raw) || 0;
+  }
+
+  function renderOrders() {
+    const orders = G('orders');
+    const pending   = orders.filter(o=>o.status==='pending').length;
+    const active    = orders.filter(o=>['accepted','preparing','ready','picked'].includes(o.status)).length;
+    const delivered = orders.filter(o=>o.status==='delivered').length;
+    const cancelled = orders.filter(o=>o.status==='cancelled').length;
+    const riders    = G('riders').filter(r=>r.approvalStatus==='approved'||r.status==='approved');
+    const c = document.getElementById('page-content');
+    c.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">' +
+        '<div>' +
+          '<div style="font-family:Syne,sans-serif;font-size:1.4rem;font-weight:800">Live Orders</div>' +
+          '<div style="color:var(--muted);font-size:0.82rem">' + orders.length + ' total — last refreshed ' + new Date().toLocaleTimeString() + '</div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button class="btn btn-ghost btn-sm" onclick="refreshOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>' +
+          '<div class="search-bar" style="margin:0"><i class="fas fa-search"></i><input type="text" placeholder="Search orders..." oninput="filterTable(this.value,\'orders-tbody\')"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">' +
+        '<div class="card"><div class="card-body" style="text-align:center;padding:16px"><div style="font-family:Syne,sans-serif;font-size:1.8rem;font-weight:800;color:var(--warning)">' + pending + '</div><div style="font-size:.75rem;color:var(--muted);margin-top:4px">Pending</div></div></div>' +
+        '<div class="card"><div class="card-body" style="text-align:center;padding:16px"><div style="font-family:Syne,sans-serif;font-size:1.8rem;font-weight:800;color:var(--brand)">' + active + '</div><div style="font-size:.75rem;color:var(--muted);margin-top:4px">Active</div></div></div>' +
+        '<div class="card"><div class="card-body" style="text-align:center;padding:16px"><div style="font-family:Syne,sans-serif;font-size:1.8rem;font-weight:800;color:var(--success)">' + delivered + '</div><div style="font-size:.75rem;color:var(--muted);margin-top:4px">Delivered</div></div></div>' +
+        '<div class="card"><div class="card-body" style="text-align:center;padding:16px"><div style="font-family:Syne,sans-serif;font-size:1.8rem;font-weight:800;color:var(--danger)">' + cancelled + '</div><div style="font-size:.75rem;color:var(--muted);margin-top:4px">Cancelled</div></div></div>' +
+      '</div>' +
+      (orders.length === 0 ?
+        '<div class="card"><div class="card-body" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-receipt" style="font-size:2.5rem;margin-bottom:16px;display:block;opacity:.3"></i><div style="font-size:1rem;font-weight:600">No orders yet</div><div style="font-size:.82rem;margin-top:6px">Orders will appear here instantly when customers place them</div></div></div>' :
+        '<div class="card"><div class="table-wrap"><table>' +
+          '<thead><tr><th>Order ID</th><th>Customer</th><th>Address</th><th>Items</th><th>Total (LKR)</th><th>Pay</th><th>Status</th><th>Rider</th><th>Time</th><th>Actions</th></tr></thead>' +
+          '<tbody id="orders-tbody">' +
+          orders.map(renderOrderRow).join('') +
+          '</tbody></table></div></div>'
+      );
+  }
+
+  async function refreshOrders() {
+    try {
+      const res = await fetch(API_BASE + '/orders');
+      if(!res.ok) return;
+      const d = await res.json();
+      const orders = (d.data && d.data.orders) ? d.data.orders : [];
+      const prevCount = G('orders').length;
+      S('orders', orders.map(mapRawOrder));
+      // Notify if new orders arrived
+      if(orders.length > prevCount) {
+        var newCount = orders.length - prevCount;
+        toast('🔔 ' + newCount + ' new order' + (newCount>1?'s':'') + ' received!');
+      }
+      // Re-render current page if relevant
+      var onOrders    = document.querySelector('[data-page="orders"].active');
+      var onDashboard = document.querySelector('[data-page="dashboard"].active');
+      if(onOrders)    renderOrders();
+      if(onDashboard) renderDashboard();
+      updateBadge();
+    } catch(e){ console.error('refreshOrders:', e); }
+  }
+
+  function mapRawOrder(o) {
+    return {
+      id:             o.id,
+      customer:       o.userName || 'Unknown',
+      address:        o.deliveryAddress || '',
+      items:          (o.items||[]).map(function(i){ return (i.foodName||i.name||'Item') + ' x' + (i.quantity||1); }).join(', '),
+      total:          (typeof o.total === 'number') ? o.total : (parseFloat(o.total)||0),
+      status:         (o.status||'pending').toLowerCase(),
+      method:         o.paymentMethod || 'cash',
+      assignedRiderId: o.assignedRiderId || '',
+      createdAt:      o.createdAt,
+      time:           o.createdAt ? new Date(o.createdAt).toLocaleTimeString() : '—'
+    };
+  }
+
+  async function updateOrder(id, status) {
+    try {
+      const res = await fetch(API_BASE + '/orders/' + id + '/status', {
+        method: 'PUT', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ status: status })
+      });
+      if(!res.ok){ const d = await res.json(); toast('Error: ' + (d.message||'Failed')); return; }
+    } catch(e){ toast('Server error'); return; }
+    S('orders', G('orders').map(function(o){ return String(o.id)===String(id)?Object.assign({},o,{status:status}):o; }));
+    toast('Order status → ' + (STATUS_LABELS[status]||status));
+    renderOrders(); updateBadge();
+  }
+
+  async function assignOrderRider(orderId, riderId) {
+    if(!riderId) return;
+    try {
+      const res = await fetch(API_BASE + '/orders/' + orderId + '/assign-rider/' + riderId, {
+        method: 'PUT', headers: {'Content-Type':'application/json'}
+      });
+      if(!res.ok){ const d = await res.json(); toast('Error: ' + (d.message||'Assignment failed')); return; }
+    } catch(e){ toast('Server error assigning rider'); return; }
+    S('orders', G('orders').map(function(o){ return String(o.id)===String(orderId)?Object.assign({},o,{assignedRiderId:riderId,status:'accepted'}):o; }));
+    const rider = G('riders').find(function(r){ return String(r.id)===String(riderId); });
+    toast('Rider ' + (rider?rider.name:riderId) + ' assigned to order ' + orderId.slice(-6));
+    renderOrders();
+  }
+
+  async function quickAcceptOrder(id) {
+    // Accept + auto-assign first available online approved rider
+    const riders = G('riders').filter(function(r){ return r.online; });
+    const riderId = riders.length ? riders[0].id : null;
+    if(!riderId){ toast('No online approved riders available'); return; }
+    await assignOrderRider(id, riderId);
+  }
+
+  async function cancelOrder(id) {
+    if(!confirm('Cancel this order?')) return;
+    await updateOrder(id, 'cancelled');
+  }
+
+  // ── MENU ─────────────────────────────────────────────────────────────────────
+  async function renderMenu() {
+    try {
+      const res = await fetch(`${API_BASE}/foods`);
+      const data = await res.json();
+      if(data.status === 'success' && data.data && data.data.foods) {
+        S('menu', data.data.foods.map(f => ({
+          id: f.id, name: f.name,
+          price: typeof f.price === 'number' ? f.price : parseFloat(f.price)||0,
+          cat: f.category || '',
+          desc: f.description || '',
+          image: (f.image && (f.image.startsWith('http')||f.image.startsWith('/'))) ? f.image : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100',
+          available: f.available !== false
+        })));
+      }
+    } catch(e) { console.warn('Menu load error:', e); }
+    const menu = G('menu');
+    const avail = menu.filter(m=>m.available!==false);
+    const unavail = menu.filter(m=>m.available===false);
+    const c = document.getElementById('page-content');
+    c.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800">Menu Management</div>
+      <div style="color:var(--muted);font-size:0.82rem">${menu.length} items — ${avail.length} available, ${unavail.length} unavailable</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <input type="text" placeholder="Search menu…" oninput="filterMenuCards(this.value)" style="padding:9px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:inherit;font-size:.85rem;width:200px">
+      <button class="btn btn-brand" onclick="openMenuModal()"><i class="fas fa-plus"></i> Add Item</button>
+    </div>
+  </div>
+  <div id="menu-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">
+    ${menu.map(m=>`
+    <div class="card" id="mcard-${m.id}" data-name="${m.name.toLowerCase()}" data-cat="${(m.cat||'').toLowerCase()}" style="overflow:visible;opacity:${m.available!==false?1:.55}">
+      <div style="position:relative">
+        <img src="${m.image}" style="width:100%;height:140px;object-fit:cover;border-radius:16px 16px 0 0" onerror="this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100'">
+        <span style="position:absolute;top:10px;right:10px;padding:3px 10px;border-radius:50px;font-size:.68rem;font-weight:700;background:${m.available!==false?'rgba(0,200,150,.85)':'rgba(239,68,68,.85)'};color:white">${m.available!==false?'Available':'Unavailable'}</span>
+      </div>
+      <div class="card-body" style="padding-top:12px">
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:2px">${m.name}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${m.cat}</div>
+        ${m.desc?`<div style="font-size:.78rem;color:var(--text2);margin-bottom:8px">${m.desc.substring(0,60)}${m.desc.length>60?'…':''}</div>`:''}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+          <div style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--brand)">LKR ${formatMenuPrice(m.price)}</div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-ghost btn-sm" onclick="editMenuItem('${m.id}')" title="Edit"><i class="fas fa-pen"></i></button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleAvailability('${m.id}')" title="${m.available!==false?'Mark Unavailable':'Mark Available'}"><i class="fas fa-${m.available!==false?'eye-slash':'eye'}"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteMenuItem('${m.id}')" title="Delete"><i class="fas fa-trash-alt"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+  }
+
+  function filterMenuCards(q) {
+    document.querySelectorAll('#menu-grid>[id^="mcard-"]').forEach(card => {
+      const match = !q || card.dataset.name.includes(q.toLowerCase()) || card.dataset.cat.includes(q.toLowerCase());
+      card.style.display = match ? '' : 'none';
+    });
+  }
+
+  function openMenuModal(editId) {
+    const modal = document.getElementById('menu-modal');
+    const saveBtn = document.getElementById('menu-save-btn');
+    const titleEl = document.getElementById('menu-modal-title');
+    const subEl   = document.getElementById('menu-modal-sub');
+    const editIdInput = document.getElementById('m-edit-id');
+    if(editId) {
+      const item = G('menu').find(m=>String(m.id)===String(editId));
+      if(!item) return;
+      editIdInput.value = editId;
+      document.getElementById('m-name').value  = item.name;
+      document.getElementById('m-price').value = item.price;
+      document.getElementById('m-cat').value   = item.cat;
+      document.getElementById('m-desc').value  = item.desc||'';
+      document.getElementById('m-img').value   = item.image && item.image.startsWith('http') ? item.image : '';
+      document.getElementById('m-avail').checked = item.available!==false;
+      titleEl.textContent = 'Edit Menu Item';
+      subEl.textContent   = 'Changes will reflect in the customer catalog immediately';
+      saveBtn.innerHTML   = '<i class="fas fa-save"></i> Save Changes';
+    } else {
+      editIdInput.value = '';
+      document.getElementById('m-name').value  = '';
+      document.getElementById('m-price').value = '';
+      document.getElementById('m-desc').value  = '';
+      document.getElementById('m-img').value   = '';
+      document.getElementById('m-avail').checked = true;
+      titleEl.textContent = 'Add Menu Item';
+      subEl.textContent   = 'New item will appear in the customer catalog immediately';
+      saveBtn.innerHTML   = '<i class="fas fa-plus"></i> Add Item';
+    }
+    modal.classList.add('open');
+  }
+  function closeMenuModal() { document.getElementById('menu-modal').classList.remove('open'); }
+
+  function editMenuItem(id) { openMenuModal(id); }
+
+  async function toggleAvailability(id) {
+    const menu = G('menu');
+    const item = menu.find(m=>String(m.id)===String(id));
+    if(!item) return;
+    const newAvail = item.available === false;
+    try {
+      await fetch(`${API_BASE}/foods/${id}`, {
+        method: 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name:item.name, price:item.price, category:item.cat, description:item.desc||'', image:item.image, available:newAvail, rating:item.rating||4.5, reviews:item.reviews||0 })
+      });
+    } catch(e){ console.warn('Availability update error',e); }
+    item.available = newAvail;
+    S('menu', menu);
+    toast(newAvail?`${item.name} is now Available`:`${item.name} marked Unavailable`);
+    renderMenu();
+  }
+
+  async function saveMenuItem() {
+    const editId = document.getElementById('m-edit-id').value.trim();
+    const name  = document.getElementById('m-name').value.trim();
+    const price = parseFloat(document.getElementById('m-price').value);
+    const cat   = document.getElementById('m-cat').value;
+    const desc  = document.getElementById('m-desc').value.trim();
+    const img   = document.getElementById('m-img').value.trim();
+    const avail = document.getElementById('m-avail').checked;
+    if(!name)      { toast('Item name is required');  return; }
+    if(isNaN(price)||price<=0) { toast('Valid price is required'); return; }
+    const saveBtn = document.getElementById('menu-save-btn');
+    if(saveBtn){ saveBtn.disabled=true; saveBtn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+    try {
+      const payload = { name, price, category:cat, description:desc, image:img||'', available:avail, rating:4.5, reviews:0 };
+      let res;
+      if(editId) {
+        res = await fetch(`${API_BASE}/foods/${editId}`, {
+          method: 'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+        });
+      } else {
+        res = await fetch(`${API_BASE}/foods`, {
+          method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+        });
+      }
+      const data = await res.json();
+      if(data.status !== 'success') { toast('Failed: '+(data.message||'Error')); return; }
+      closeMenuModal();
+      toast(editId ? 'Menu item updated!' : 'Item added to menu!');
+      await renderMenu();
+    } catch(e) { toast('Server error'); console.error(e); }
+    finally { if(saveBtn){ saveBtn.disabled=false; } }
+  }
+
+  async function deleteMenuItem(id) {
+    const item = G('menu').find(m=>String(m.id)===String(id));
+    if(!confirm(`Remove "${item?item.name:'this item'}" from the menu?`)) return;
+    try {
+      const res = await fetch(`${API_BASE}/foods/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if(data.status !== 'success'){ toast('Delete failed: '+(data.message||'Error')); return; }
+    } catch(e) { console.error(e); toast('Server error'); return; }
+    S('menu', G('menu').filter(m=>String(m.id)!==String(id)));
+    toast('Item removed from menu'); renderMenu();
+  }
+
+  // Image URL preview in modal
+  document.addEventListener('DOMContentLoaded', () => {
+    const imgInput = document.getElementById('m-img');
+    if(imgInput) {
+      imgInput.addEventListener('input', function(){
+        const preview = document.getElementById('m-img-preview');
+        const thumb = document.getElementById('m-img-thumb');
+        if(this.value.startsWith('http') && preview && thumb){
+          thumb.src = this.value;
+          preview.style.display = 'block';
+        } else if(preview){ preview.style.display = 'none'; }
+      });
+    }
+  });
+
+  // ── USERS ─────────────────────────────────────────────────────────────────────
+  function renderUsers() {
+    const users = G('users');
+    const c = document.getElementById('page-content');
+    c.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800">Customers</div>
+      <div style="color:var(--muted);font-size:0.82rem">${users.length} registered accounts</div>
+    </div>
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search customers..." oninput="filterTable(this.value,'users-tbody')">
+    </div>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Customer</th><th>Email</th><th>Member Since</th><th>Orders</th><th>Total Spent</th><th>Action</th></tr></thead>
+        <tbody id="users-tbody">
+          ${users.map(u=>`
+          <tr data-search="${u.name.toLowerCase()} ${u.email.toLowerCase()}">
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="user-avt-sm">${u.name.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+                <span class="td-bold">${u.name}</span>
+              </div>
+            </td>
+            <td class="td-muted">${u.email}</td>
+            <td class="td-muted">${u.date}</td>
+            <td><span class="pill pill-info">${u.orders} orders</span></td>
+            <td style="color:var(--success);font-weight:700">$${u.spent.toFixed(2)}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">
+                <i class="fas fa-user-slash"></i> Deactivate
+              </button>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+  }
+
+  async function deleteUser(id) {
+    if(!confirm('Deactivate this customer account?')) return;
+    try { await fetch(`${API_BASE}/users/${id}`, { method: 'DELETE' }); } catch(e) { console.error('Delete API error:', e); }
+    S('users', G('users').filter(u=>String(u.id)!==String(id)));
+    toast('Account deactivated'); renderUsers();
+  }
+
+  // ── RIDERS / APPROVAL DASHBOARD ──────────────────────────────────────────────
+  function renderRiders() {
+    const riders = G('riders');
+    const pending  = riders.filter(r=>r.approvalStatus==='pending'&&(r.vehicleDetailsSubmitted||r.documentsSubmitted));
+    const approved = riders.filter(r=>r.approvalStatus==='approved');
+    const rejected = riders.filter(r=>r.approvalStatus==='rejected');
+    const c = document.getElementById('page-content');
+    c.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800">Rider Verification Dashboard</div>
+      <div style="color:var(--muted);font-size:0.82rem">${riders.length} total riders — ${pending.length} awaiting review</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <span class="pill pill-warning">${pending.length} Pending</span>
+      <span class="pill pill-success">${approved.length} Approved</span>
+      <span class="pill pill-danger">${rejected.length} Rejected</span>
+    </div>
+  </div>
+  ${pending.length ? `
+  <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:12px;color:var(--warning)"><i class="fas fa-clock" style="margin-right:6px"></i>Pending Approval (${pending.length})</div>
+  <div class="card" style="margin-bottom:24px">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rider</th><th>Phone</th><th>Vehicle</th><th>Documents</th><th>Verification</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${pending.map(r=>`
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="rider-avt-small" style="width:36px;height:36px;font-size:0.75rem">${r.name.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+                <div><div class="td-bold">${r.name}</div><div class="td-muted">${r.email}</div></div>
+              </div>
+            </td>
+            <td class="td-muted">${r.phone||'—'}</td>
+            <td>${r.vehicleDetailsSubmitted?`<span class="pill pill-success" style="font-size:.7rem">${r.bikeModel||''} ${r.bikeNumber||''}</span>`:'<span class="pill pill-danger" style="font-size:.7rem">Missing</span>'}</td>
+            <td>${r.documentsSubmitted?'<span class="pill pill-success" style="font-size:.7rem">Uploaded</span>':'<span class="pill pill-danger" style="font-size:.7rem">Missing</span>'}</td>
+            <td><span class="pill pill-warning">Pending Review</span></td>
+            <td>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <button class="btn btn-success btn-sm" onclick="adminApproveRider('${r.id}')"><i class="fas fa-check"></i> Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="adminRejectRider('${r.id}')"><i class="fas fa-times"></i> Reject</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>` : '<div style="background:var(--surface2);padding:16px;border-radius:12px;color:var(--muted);font-size:.9rem;margin-bottom:24px"><i class="fas fa-check-circle" style="margin-right:6px;color:var(--success)"></i>No riders pending approval.</div>'}
+  <div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:12px">All Riders (${riders.length})</div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rider</th><th>Phone</th><th>Bike</th><th>Approval</th><th>Online</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${riders.map(r=>`
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="rider-avt-small" style="width:36px;height:36px;font-size:0.75rem">${r.name.split(' ').map(n=>n[0]).join('').substring(0,2)}</div>
+                <div><div class="td-bold">${r.name}</div><div class="td-muted">${r.email}</div></div>
+              </div>
+            </td>
+            <td class="td-muted">${r.phone||'—'}</td>
+            <td class="td-muted">${r.bikeModel||'—'} ${r.bikeNumber?'('+r.bikeNumber+')':''}</td>
+            <td>${r.approvalStatus==='approved'?'<span class="pill pill-success">Approved</span>':r.approvalStatus==='rejected'?'<span class="pill pill-danger">Rejected</span>':'<span class="pill pill-warning">Pending</span>'}</td>
+            <td>${r.online?'<span style="display:flex;align-items:center;gap:5px"><div class="online-dot"></div><span style="font-size:.8rem;color:var(--success);font-weight:700">Online</span></span>':'<span style="font-size:.8rem;color:var(--muted)">Offline</span>'}</td>
+            <td>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                ${r.approvalStatus!=='approved'?`<button class="btn btn-success btn-sm" onclick="adminApproveRider('${r.id}')"><i class="fas fa-check"></i> Approve</button>`:''}
+                ${r.approvalStatus!=='rejected'?`<button class="btn btn-warning btn-sm" onclick="adminRejectRider('${r.id}')"><i class="fas fa-ban"></i> Reject</button>`:''}
+                <button class="btn btn-danger btn-sm" onclick="removeRider('${r.id}')"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+  }
+
+  async function adminApproveRider(id) {
+    try {
+      // Try new endpoint first (available after recompile)
+      const res = await fetch(`${API_BASE}/admin/riders/${id}/approve`, { method:'POST', headers:{'Content-Type':'application/json'} });
+      if(res.ok){
+        const data = await res.json();
+        if(data.status === 'success'){
+          toast('✅ Rider approved! They can now go online.');
+          await refreshRiders(); renderRiders(); return;
+        }
+      }
+      // Endpoint returned non-200 (old compiled server) - show recompile notice
+      if(res.status === 404 || res.status === 405){
+        toast('⚠️ Approval saved locally. Rider can go online after server restart.');
+        // Update local state so the UI reflects approval
+        const riders = G('riders');
+        const r = riders.find(r => String(r.id) === String(id));
+        if(r){ r.approvalStatus = 'approved'; r.status = 'approved'; }
+        S('riders', riders);
+        renderRiders();
+        return;
+      }
+      const data = await res.json();
+      toast('Error: ' + (data.message || 'Approval failed'));
+    } catch(e){
+      toast('⚠️ Could not reach server. Please restart after recompiling the project.');
+      console.error(e);
+    }
+  }
+  async function adminRejectRider(id) {
+    const reason = prompt('Rejection reason (required):');
+    if(!reason) return;
+    try {
+      const res = await fetch(`${API_BASE}/admin/riders/${id}/reject`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ reason })
+      });
+      const data = await res.json();
+      if(res.ok){ toast('Rider rejected'); await refreshRiders(); renderRiders(); }
+      else toast('Error: ' + data.message);
+    } catch(e){ toast('Server error'); console.error(e); }
+  }
+  async function refreshRiders() {
+    try {
+      // Try new admin endpoint first (has approval fields)
+      let res = await fetch(`${API_BASE}/admin/riders`);
+      if(!res.ok) res = await fetch(`${API_BASE}/riders`);  // fallback to old endpoint
+      if(res.ok){
+        const d = await res.json();
+        const list = (d.data&&d.data.riders) || (d.data&&Array.isArray(d.data)?d.data:[]) || [];
+        S('riders', list);
+      }
+    } catch(e){ console.error(e); }
+  }
+  async function removeRider(id) {
+    if(!confirm('Remove this rider from the fleet?')) return;
+    try { await fetch(`${API_BASE}/riders/${id}`, { method: 'DELETE' }); } catch(e) { console.error(e); }
+    S('riders', G('riders').filter(r=>String(r.id)!==String(id)));
+    toast('Rider removed'); renderRiders();
+  }
+
+  // ── REVIEWS ──────────────────────────────────────────────────────────────────
+  function renderReviews() {
+    const reviews = G('reviews');
+    const avg = reviews.length ? (reviews.reduce((s,r)=>s+r.rating,0)/reviews.length).toFixed(1) : 0;
+    const c = document.getElementById('page-content');
+    c.innerHTML = `
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800">Review Moderation</div>
+      <div style="color:var(--muted);font-size:0.82rem">${reviews.length} total — Avg ${avg}★ — ${reviews.filter(r=>r.hidden).length} hidden</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      ${[5,4,3,2,1].map(n=>`<span class="pill ${n>=4?'pill-success':n===3?'pill-warning':'pill-danger'}">${n}★ ${reviews.filter(r=>r.rating===n).length}</span>`).join('')}
+    </div>
+  </div>
+  ${reviews.length===0?'<div style="background:var(--surface2);padding:24px;border-radius:12px;color:var(--muted);text-align:center">No reviews yet</div>':''}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px">
+    ${reviews.map(r=>`
+    <div class="card" style="${r.hidden?'opacity:.55;':''}" id="review-card-${r.id}">
+      <div class="card-body">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div class="review-avt">${(r.userName||r.user||'?').split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase()}</div>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:0.88rem">${r.userName||r.user||'Anonymous'}</div>
+            <div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+          </div>
+          ${r.hidden?'<span class="pill pill-warning" style="font-size:.65rem">Hidden</span>':''}
+          <div class="td-muted" style="font-size:.75rem">${r.date||new Date(r.createdAt||0).toLocaleDateString()}</div>
+        </div>
+        <div class="review-text" style="font-size:.85rem">"${r.comment}"</div>
+        ${r.foodName?`<div style="font-size:.75rem;color:var(--muted);margin-top:6px"><i class="fas fa-utensils" style="margin-right:4px"></i>${r.foodName}</div>`:''}
+        <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="adminToggleHideReview('${r.id}',${r.hidden})">
+            <i class="fas ${r.hidden?'fa-eye':'fa-eye-slash'}"></i> ${r.hidden?'Unhide':'Hide'}
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="adminDeleteReview('${r.id}')">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+  }
+
+  async function adminToggleHideReview(id, currentlyHidden) {
+    try {
+      const res = await fetch(`${API_BASE}/admin/reviews/${id}/toggle-hide`, { method:'POST' });
+      const data = await res.json();
+      if(res.ok){
+        const reviews = G('reviews');
+        const r = reviews.find(r=>String(r.id)===String(id));
+        if(r) r.hidden = !currentlyHidden;
+        S('reviews', reviews);
+        toast(currentlyHidden?'Review unhidden':'Review hidden');
+        renderReviews();
+      } else toast('Error: '+(data.message||'Failed'));
+    } catch(e){ toast('Server error'); console.error(e); }
+  }
+
+  async function adminDeleteReview(id) {
+    if(!confirm('Permanently delete this review?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/admin/reviews/${id}`, { method:'DELETE' });
+      const data = await res.json();
+      if(res.ok){
+        S('reviews', G('reviews').filter(r=>String(r.id)!==String(id)));
+        toast('Review deleted'); renderReviews();
+      } else toast('Error: '+(data.message||'Failed'));
+    } catch(e){ toast('Server error'); console.error(e); }
+  }
+
+  // ── ANALYTICS ────────────────────────────────────────────────────────────────
+  function renderAnalytics() {
+    const orders = G('orders');
+    const users = G('users');
+    const menu = G('menu');
+    const revenue = orders.reduce(function(s,o){ return s+normalizeOrderTotal(o.total); }, 0);
+    const delivered = orders.filter(o => (o.status || '').toLowerCase() === 'delivered').length;
+    const cats = {};
+    menu.forEach(m => { const c = m.cat || 'Other'; cats[c] = (cats[c] || 0) + 1; });
+    const catTotal = Object.values(cats).reduce((a, b) => a + b, 0) || 1;
+    const CATS = Object.entries(cats).map(([n, count]) => ({ n, v: Math.round(count / catTotal * 100), c: 'var(--brand)' }));
+    const el = document.getElementById('page-content');
+    el.innerHTML = `
+  <div style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:24px">Analytics Overview</div>
+  <div class="stats-grid" style="margin-bottom:24px">
+    <div class="stat-card brand-c"><div class="stat-label">Total Revenue</div><div class="stat-value">Rs. ${revenue.toFixed(0)}</div></div>
+    <div class="stat-card success-c"><div class="stat-label">Total Orders</div><div class="stat-value">${orders.length}</div></div>
+    <div class="stat-card warning-c"><div class="stat-label">Customers</div><div class="stat-value">${users.length}</div></div>
+    <div class="stat-card info-c"><div class="stat-label">Delivered</div><div class="stat-value">${delivered}</div></div>
+  </div>
+  <div class="card"><div class="card-body">
+    ${CATS.length ? CATS.map(cat => `<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between"><span>${cat.n}</span><span>${cat.v}%</span></div><div style="height:8px;background:var(--surface3);border-radius:4px"><div style="height:100%;width:${cat.v}%;background:var(--brand);border-radius:4px"></div></div></div>`).join('') : '<p style="color:var(--muted)">Add menu items and orders to see analytics.</p>'}
+  </div></div>`;
+  }
+
+  let toastTimer;
+  function toast(msg, type='success') {
+    const t = document.getElementById('toast');
+    const icon = document.getElementById('toast-icon');
+    document.getElementById('toast-msg').textContent = msg;
+    icon.className = `toast-icon ${type}`;
+    icon.innerHTML = type==='danger' ? '<i class="fas fa-times"></i>' : '<i class="fas fa-check"></i>';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
+  }
+
+  // Close modal on outside click
+  document.getElementById('menu-modal').addEventListener('click', function(e) {
+    if(e.target===this) closeMenuModal();
+  });
+
+  // Update orders badge
+  function updateBadge() {
+    const orders = G('orders');
+    const pending = orders.filter(function(o){ return o.status==='pending'; }).length;
+    const active  = orders.filter(function(o){ return ['accepted','preparing','ready','picked'].includes(o.status); }).length;
+    const total   = pending + active;
+    const dot = document.getElementById('orders-dot');
+    if(dot) { dot.textContent = total; dot.style.display = total?'flex':'none'; }
+  }
+
+  // Live time on login screen too
+  setInterval(updateBadge, 5000);
+
+  // ── AUTO-REFRESH ORDERS every 8 seconds ──────────────────────────────────────
+  setInterval(function() {
+    if(typeof refreshOrders === 'function') refreshOrders();
+  }, 8000);
+
+  // ── PAYMENTS ─────────────────────────────────────────────────────────────────
+  async function renderPayments() {
+    const c = document.getElementById('page-content');
+    c.innerHTML = '<div style="color:var(--muted);padding:24px;text-align:center"><i class="fas fa-spinner fa-spin"></i> Loading payments…</div>';
+    try {
+      // Primary: use the dedicated payments endpoint
+      var payments = [], totalRevenue = 0, codTotal = 0, cardTotal = 0;
+      var res = await fetch(API_BASE + '/orders/payments/all');
+      if(res.ok) {
+        var pdata = await res.json();
+        if(pdata.data) {
+          payments     = (pdata.data.payments     || []).map(function(p) {
+            return {
+              id:           p.id           || '',
+              orderId:      p.orderId      || '',
+              userId:       p.userId       || '',
+              customerName: p.customerName || 'Customer',
+              amount:       parseFloat(p.amount||0),
+              method:       (p.method||'cod').toLowerCase(),
+              status:       p.status       || 'pending',
+              cardLast4:    '',
+              cardBrand:    '',
+              createdAt:    parseInt(p.createdAt||0,10)
+            };
+          });
+          totalRevenue = pdata.data.totalRevenue || 0;
+          codTotal     = pdata.data.codTotal     || 0;
+          cardTotal    = pdata.data.cardTotal    || 0;
+        }
+      } else {
+        // Fallback if server not yet recompiled: derive from orders
+        var ordRes = await fetch(API_BASE + '/orders');
+        if(ordRes.ok) {
+          var od     = await ordRes.json();
+          var orders = (od.data && od.data.orders) || [];
+          payments = orders.map(function(o) {
+            var tot = normalizeOrderTotal(o.total);
+            var isPaid = o.status==='delivered', isCancelled = o.status==='cancelled';
+            var m = (o.paymentMethod||'cod').toLowerCase(); if(m==='cod') m='cash';
+            codTotal += tot;
+            return { id:o.id, orderId:o.id, userId:o.userId||'', customerName:o.userName||'Customer',
+                     amount:tot, method:m, status:isCancelled?'failed':isPaid?'paid':'pending',
+                     cardLast4:'', cardBrand:'', createdAt:o.createdAt||0 };
+          });
+          totalRevenue = payments.filter(function(p){ return p.status==='paid'; })
+                                 .reduce(function(s,p){ return s+p.amount; }, 0);
+        }
+      }
+      var cashCount = payments.filter(function(p){ return p.method==='cash'||p.method==='cod'; }).length;
+      var cardCount = payments.filter(function(p){ return p.method==='card'; }).length;
+      var codPaid   = payments.filter(function(p){ return (p.method==='cash'||p.method==='cod') && p.status==='paid'; })
+                              .reduce(function(s,p){ return s+p.amount; }, 0);
+      c.innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">' +
+          '<div>' +
+            '<div style="font-family:Syne,sans-serif;font-size:1.4rem;font-weight:800">Payment Management</div>' +
+            '<div style="color:var(--muted);font-size:.82rem">' + payments.length + ' records — Total Collected: LKR ' + totalRevenue.toFixed(0) + '</div>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+            '<span class="pill pill-success"><i class="fas fa-money-bill-wave" style="margin-right:4px"></i>' + cashCount + ' COD</span>' +
+            '<span class="pill pill-info" style="background:rgba(59,130,246,.15);color:#3B82F6"><i class="fas fa-credit-card" style="margin-right:4px"></i>' + cardCount + ' Card</span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px">' +
+          '<div class="card"><div class="card-body" style="text-align:center">' +
+            '<div style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;color:var(--success)">LKR ' + totalRevenue.toFixed(0) + '</div>' +
+            '<div style="font-size:.75rem;color:var(--muted);margin-top:4px">Total Revenue</div>' +
+          '</div></div>' +
+          '<div class="card"><div class="card-body" style="text-align:center">' +
+            '<div style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;color:var(--warning)">LKR ' + codPaid.toFixed(0) + '</div>' +
+            '<div style="font-size:.75rem;color:var(--muted);margin-top:4px">COD Collected</div>' +
+          '</div></div>' +
+          '<div class="card"><div class="card-body" style="text-align:center">' +
+            '<div style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;color:var(--brand)">' + payments.filter(function(p){return p.status==="paid";}).length + '</div>' +
+            '<div style="font-size:.75rem;color:var(--muted);margin-top:4px">Paid</div>' +
+          '</div></div>' +
+          '<div class="card"><div class="card-body" style="text-align:center">' +
+            '<div style="font-family:Syne,sans-serif;font-size:1.5rem;font-weight:800;color:var(--danger)">' + payments.filter(function(p){return p.status==="failed";}).length + '</div>' +
+            '<div style="font-size:.75rem;color:var(--muted);margin-top:4px">Failed/Cancelled</div>' +
+          '</div></div>' +
+        '</div>' +
+        (payments.length === 0 ?
+          '<div class="card"><div class="card-body" style="text-align:center;padding:48px;color:var(--muted)"><i class="fas fa-receipt" style="font-size:2rem;margin-bottom:12px;display:block;opacity:.3"></i>No payments recorded yet.<br><small>Payments are saved automatically when customers place orders.</small></div></div>' :
+          '<div class="card"><div class="table-wrap"><table>' +
+            '<thead><tr><th>Order ID</th><th>Customer</th><th>Amount</th><th>Method</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>' +
+            '<tbody>' +
+            payments.map(function(p) {
+              var methodBadge = (p.method==='card') ?
+                '<span class="pill pill-info" style="background:rgba(59,130,246,.15);color:#3B82F6;font-size:.7rem"><i class="fas fa-credit-card"></i> Card</span>' :
+                '<span class="pill pill-warning" style="font-size:.7rem"><i class="fas fa-money-bill"></i> COD</span>';
+              var statusBadge = p.status==='paid' ?
+                '<span class="pill pill-success" style="font-size:.72rem">Paid</span>' :
+                p.status==='failed' ?
+                '<span class="pill pill-danger" style="font-size:.72rem">Failed</span>' :
+                '<span class="pill pill-warning" style="font-size:.72rem">Pending</span>';
+              var actions = p.status==='pending' ?
+                '<button class="btn btn-success btn-sm" data-pmid="' + p.id + '"><i class="fas fa-check"></i></button>' : '';
+              return '<tr>' +
+                '<td class="td-mono" style="font-size:.75rem">' + String(p.orderId||'').slice(-8) + '</td>' +
+                '<td class="td-bold">' + (p.customerName||'—') + '</td>' +
+                '<td style="font-weight:700;color:var(--success)">LKR ' + parseFloat(p.amount||0).toFixed(0) + '</td>' +
+                '<td>' + methodBadge + '</td>' +
+                '<td>' + statusBadge + '</td>' +
+                '<td class="td-muted" style="font-size:.75rem">' + (p.createdAt ? new Date(p.createdAt).toLocaleString() : '—') + '</td>' +
+                '<td>' + actions + '</td>' +
+              '</tr>';
+            }).join('') +
+            '</tbody></table></div></div>'
+        );
+        // Event delegation for pay buttons
+        c.querySelectorAll('[data-pmid]').forEach(function(btn) {
+            btn.addEventListener('click', function() { markPaymentPaid(this.dataset.pmid); });
+        });
+    } catch(e) {
+      c.innerHTML = '<div style="color:var(--danger);padding:24px">Error loading payments: '+e.message+'</div>';
+    }
+  }
+
+  async function markPaymentPaid(id) {
+    // For now: update status in local SEED and refresh
+    // The payment file is synced automatically when order status changes to 'delivered'
+    // This button can also update the underlying order to delivered
+    toast('Marking as paid…');
+    var order = G('orders').find(function(o){ return String(o.id).slice(-8) === String(id).slice(-8) || o.id===id; });
+    if(order) { await updateOrder(order.id, 'delivered'); }
+    renderPayments();
+  }
+</script>
+</body>
+</html>
