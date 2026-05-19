@@ -1508,8 +1508,6 @@
             const email = document.getElementById("l-email").value.trim();
             const pass  = document.getElementById("l-pass").value;
             if (!email || !pass) { toast("Please fill in all fields"); return; }
-            if (!email.includes("@")) { toast("Email must contain @"); return; }
-            if (pass.length < 6) { toast("Password must be at least 6 characters"); return; }
 
             try {
                 const res = await fetch(`${this.baseURL}/users/login`, {
@@ -1550,9 +1548,6 @@
             const phone = document.getElementById("r-phone").value.trim();
             const pass  = document.getElementById("r-pass").value;
             if (!fname || !email || !pass) { toast("Please fill required fields"); return; }
-            if (!email.includes("@")) { toast("Email must contain @"); return; }
-            if (phone && phone.replace(/\D/g, "").length < 10) { toast("Phone number must be at least 10 digits"); return; }
-            if (pass.length < 6) { toast("Password must be at least 6 characters"); return; }
 
             try {
                 const res = await fetch(`${this.baseURL}/users/register`, {
@@ -1617,9 +1612,6 @@
             const newName  = (fname + " " + lname).trim();
             const newPhone = get("pf-phone");
             const newEmail = get("pf-email");
-
-            if (newEmail && !newEmail.includes("@")) { toast("Email must contain @"); return; }
-            if (newPhone && newPhone.replace(/\D/g, "").length < 10) { toast("Phone number must be at least 10 digits"); return; }
 
             // Step 1: Update name + phone
             try {
