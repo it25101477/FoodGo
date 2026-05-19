@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b8212abb-3ba0-4901-8cd7-712f1f7eb7a2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/data/foods.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/orders.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/payments.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/reviews.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/riders.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tracking.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/users.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/FoodGo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/config/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/config/WebConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/controller/FoodController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/controller/OrderController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/controller/WebController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/model/Food.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/model/Order.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/service/FoodService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/service/OrderService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/util/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/util/PasswordUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/foodgo/util/UserProfile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/riderpage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/foodgo/FoodGoTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/FoodGo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/config/GlobalExceptionHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/config/WebConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/AdminController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/FoodController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/OrderController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/PaymentController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/ReviewController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/RiderController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/TrackingController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/controller/WebController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/DeliveryTracking.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/Food.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/Order$OrderItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/Order.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/Payment.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/Review.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/Rider.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/model/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/DeliveryTrackingService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/FileStorageService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/FoodService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/OrderService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/PaymentService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/ReviewService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/RiderService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/util/ApiResponse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/util/PasswordUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/foodgo/util/UserProfile.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/riderpage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/foodgo/FoodGoTests.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3DvTgGHsCtL7HBwiET3HlbMCkU1" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.FoodGo.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/pixelpulseceo/Documents/GitHub/FoodGo/src/main/java/com/foodgo/service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/foodgo/service" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.24374.151" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.24374.151" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b8212abb-3ba0-4901-8cd7-712f1f7eb7a2" name="Changes" comment="" />
+      <created>1779161652351</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1779161652351</updated>
+      <workItem from="1779161653468" duration="101000" />
+      <workItem from="1779161936349" duration="22000" />
+      <workItem from="1779162017395" duration="66000" />
+      <workItem from="1779162132689" duration="381000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
