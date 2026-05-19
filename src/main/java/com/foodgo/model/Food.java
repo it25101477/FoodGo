@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Food Model - Represents a menu item in the FoodGo system
  */
 public class Food {
-    @JsonProperty("id")
-    private String id;
+    @JsonProperty("id")   //JSON Field to Java Field
+    private String id;    // Attributes    and Encapsulation
     
     @JsonProperty("name")
     private String name;
@@ -33,10 +33,10 @@ public class Food {
     @JsonProperty("available")
     private boolean available;
 
-    public Food() {}
+    public Food() {}  //Default contructor .Create an empty Food object.
 
     public Food(String id, String name, String description, String category, double price, 
-                double rating, int reviews, String image, boolean available) {
+                double rating, int reviews, String image, boolean available) {   // parameterized constructor used to create a food object with values
         this.id = id;
         this.name = name;
         this.description = description;
@@ -47,7 +47,7 @@ public class Food {
         this.image = image;
         this.available = available;
     }
-
+// //getters and setters   g-read s-update
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -59,7 +59,7 @@ public class Food {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
-
+                  //Abstraction
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
 
@@ -74,15 +74,15 @@ public class Food {
 
     public boolean isAvailable() { return available; }
     public void setAvailable(boolean available) { this.available = available; }
-
+// object data convert in to one text line
     public String toFileLine() {
         return id + "|" + name + "|" + description + "|" + category + "|" + price + "|" + 
                rating + "|" + reviews + "|" + image + "|" + available;
     }
-
+//one text line convert in to object data
     public static Food fromFileLine(String line) {
-        String[] parts = line.split("\\|", -1);
-        return new Food(
+        String[] parts = line.split("\\|", -1);//split the line using
+        return new Food(  //create and return a new food object using split values  and//new object create
             parts.length > 0 ? parts[0] : "",
             parts.length > 1 ? parts[1] : "",
             parts.length > 2 ? parts[2] : "",
@@ -95,8 +95,8 @@ public class Food {
         );
     }
 
-    @Override
-    public String toString() {
+    @Override  // method overriding
+    public String toString() { //return object details to readable text
         return "Food{" + "id='" + id + "', name='" + name + "', price=" + price + 
                ", rating=" + rating + ", available=" + available + '}';
     }

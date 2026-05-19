@@ -15,29 +15,29 @@ import java.util.Map;
 /**
  * Food Controller - Handles all food/menu related HTTP requests
  */
-@RestController
-@RequestMapping("/api/foods")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RestController //
+@RequestMapping("/api/foods") //sets the base URL for the all end point
+@CrossOrigin(origins = "*", allowedHeaders = "*") //enables CORS for all domains
 public class FoodController {
 
     @Autowired
     private FoodService foodService;
 
-    @GetMapping
-    public ResponseEntity<ApiResponse> getAllFoods() {
+    @GetMapping  // get all foods
+    public ResponseEntity<ApiResponse> getAllFoods() {//method returns HTTP response with ApiResponse  object
         try {
             List<Food> foods = foodService.getAllFoods();
-            Map<String, Object> data = new HashMap<>();
+            Map<String, Object> data = new HashMap<>();//creates response data map
             data.put("count", foods.size());
             data.put("foods", foods);
             return ResponseEntity.ok(ApiResponse.success("Foods retrieved successfully", data));
-        } catch (Exception e) {
+        } catch (Exception e) { //catch runtime errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.error("Failed to fetch foods: " + e.getMessage()));
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")                           //extract ID from URL
     public ResponseEntity<ApiResponse> getFoodById(@PathVariable String id) {
         try {
             Food food = foodService.getFoodById(id);
@@ -68,14 +68,14 @@ public class FoodController {
         }
     }
 
-    @PostMapping
+    @PostMapping //create
     public ResponseEntity<ApiResponse> createFood(@RequestBody Food food) {
         try {
-            if (food.getName() == null || food.getName().trim().isEmpty()) {
+            if (food.getName() == null || food.getName().trim().isEmpty()) {  //Validation check
                 return ResponseEntity.badRequest()
                         .body(ApiResponse.error("Food name is required"));
             }
-            food.setId(String.valueOf(System.currentTimeMillis()));
+            food.setId(String.valueOf(System.currentTimeMillis()));//generates unique ID using timestamp
             foodService.saveFood(food);
             Map<String, Object> data = new HashMap<>();
             data.put("foodId", food.getId());
@@ -86,11 +86,11 @@ public class FoodController {
                     .body(ApiResponse.error("Failed to create food: " + e.getMessage()));
         }
     }
-
+//update food
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateFood(@PathVariable String id, @RequestBody Food updatedFood) {
         try {
-            boolean result = foodService.updateFood(id, updatedFood);
+            boolean result = foodService.updateFood(id, updatedFood);//calls update service method
             if (result) {
                 return ResponseEntity.ok(ApiResponse.success("Food updated successfully"));
             } else {

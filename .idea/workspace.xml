@@ -4,57 +4,40 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8212abb-3ba0-4901-8cd7-712f1f7eb7a2" name="Changes" comment="" />
+    <list default="true" id="95de7393-f084-45f3-b954-060ef3032f2a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0,
-  &quot;fromUser&quot;: false
-}</component>
-  <component name="ProjectId" id="3DvTgGHsCtL7HBwiET3HlbMCkU1" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3DqKOiJTwKaiRcsFjSYbo7z03Ur" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Maven.Foodgo [test].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.FoodGo.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/pixelpulseceo/Documents/GitHub/FoodGo/src/main/java/com/foodgo/service",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+    "last_opened_file_path": "C:/Users/idume/Downloads/FOODGO_UPDATED (1)/FoodGo"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/java/com/foodgo/service" />
-    </key>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -65,15 +48,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b8212abb-3ba0-4901-8cd7-712f1f7eb7a2" name="Changes" comment="" />
-      <created>1779161652351</created>
+      <changelist id="95de7393-f084-45f3-b954-060ef3032f2a" name="Changes" comment="" />
+      <created>1779004129507</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1779161652351</updated>
-      <workItem from="1779161653468" duration="101000" />
-      <workItem from="1779161936349" duration="22000" />
-      <workItem from="1779162017395" duration="66000" />
-      <workItem from="1779162132689" duration="455000" />
+      <updated>1779004129507</updated>
     </task>
     <servers />
   </component>
